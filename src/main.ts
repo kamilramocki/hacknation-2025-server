@@ -28,6 +28,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
+  app.enableCors({
+    origin: '*', // TODO: remove in production
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // TODO: remove in production
+  });
+
   await app.listen(process.env.PORT ?? 3000);
   console.log(`Application running on: http://localhost:${process.env.PORT ?? 3000}`);
   console.log(`Swagger docs available at: http://localhost:${process.env.PORT ?? 3000}/api/docs`);
