@@ -8,8 +8,26 @@ export class WebsiteService {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(createWebsiteDto: CreateWebsiteDto) {
+    const { domainAddresses, ipAddresses, ...websiteData } = createWebsiteDto;
+
     return this.prisma.website.create({
-      data: createWebsiteDto,
+      data: {
+        ...websiteData,
+        domainAddresses: domainAddresses?.length
+          ? {
+              create: domainAddresses.map((address) => ({ address })),
+            }
+          : undefined,
+        ipAddresses: ipAddresses?.length
+          ? {
+              create: ipAddresses.map((address) => ({ address })),
+            }
+          : undefined,
+      },
+      include: {
+        domainAddresses: true,
+        ipAddresses: true,
+      },
     });
   }
 
@@ -41,9 +59,31 @@ export class WebsiteService {
   async update(id: string, updateWebsiteDto: UpdateWebsiteDto) {
     await this.findOne(id);
 
+    const { domainAddresses, ipAddresses, ...websiteData } = updateWebsiteDto;
+
     return this.prisma.website.update({
       where: { id },
-      data: updateWebsiteDto,
+      data: {
+        ...websiteData,
+        // If domainAddresses provided, replace all existing ones
+        domainAddresses: domainAddresses
+          ? {
+              deleteMany: {},
+              create: domainAddresses.map((address) => ({ address })),
+            }
+          : undefined,
+        // If ipAddresses provided, replace all existing ones
+        ipAddresses: ipAddresses
+          ? {
+              deleteMany: {},
+              create: ipAddresses.map((address) => ({ address })),
+            }
+          : undefined,
+      },
+      include: {
+        domainAddresses: true,
+        ipAddresses: true,
+      },
     });
   }
 
@@ -67,7 +107,6 @@ export class WebsiteService {
     const currentTimeMinutes = Math.floor(Date.now() / 1000 / 60);
     const token = this.generateTokenForMinute(id, currentTimeMinutes);
 
-    // Token expires in 2 minutes (return Unix timestamp in seconds)
     const expiresAt = (currentTimeMinutes + 2) * 60;
 
     return { 
@@ -82,7 +121,6 @@ export class WebsiteService {
 
     const currentTimeMinutes = Math.floor(Date.now() / 1000 / 60);
 
-    // Check tokens for current minute and previous minute (2 minute window)
     const validTokens = [
       this.generateTokenForMinute(websiteId, currentTimeMinutes),
       this.generateTokenForMinute(websiteId, currentTimeMinutes - 1),
