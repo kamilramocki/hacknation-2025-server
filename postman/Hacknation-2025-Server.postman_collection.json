@@ -104,6 +104,80 @@
           }
         },
         {
+          "name": "GetCurrentToken",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.token) {",
+                  "    pm.collectionVariables.set('CurrentToken', jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Get current token for a website (valid for 2 minutes) - use this for QR code",
+            "url": {
+              "raw": "{{ApiUrl}}/websites/{{WebsiteId}}/current-token",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "websites",
+                "{{WebsiteId}}",
+                "current-token"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "VerifyToken",
+          "event": [],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Verify a scanned QR token - checks if the website is legitimate",
+            "url": {
+              "raw": "{{ApiUrl}}/websites/{{WebsiteId}}/verify-token",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "websites",
+                "{{WebsiteId}}",
+                "verify-token"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"{{CurrentToken}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
           "name": "UpdateWebsite",
           "event": [],
           "request": {
@@ -553,6 +627,11 @@
     },
     {
       "key": "IPAddressId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "CurrentToken",
       "value": "",
       "type": "default"
     }

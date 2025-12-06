@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateWebsiteDto, UpdateWebsiteDto } from './dto';
+import { createHmac } from 'crypto';
 
 @Injectable()
 export class WebsiteService {
@@ -52,6 +53,50 @@ export class WebsiteService {
     return this.prisma.website.delete({
       where: { id },
     });
+  }
+  
+  private generateTokenForMinute(websiteId: string, minute: number): string {
+    const keyPrefix = process.env.TOKEN_KEY_PREFIX || 'default_key';
+    const key = `${keyPrefix}${minute}`;
+    return createHmac('sha256', key).update(websiteId).digest('hex');
+  }
+
+  async getCurrentToken(id: string) {
+    await this.findOne(id);
+
+    const currentTimeMinutes = Math.floor(Date.now() / 1000 / 60);
+    const token = this.generateTokenForMinute(id, currentTimeMinutes);
+
+    // Token expires in 2 minutes (return Unix timestamp in seconds)
+    const expiresAt = (currentTimeMinutes + 2) * 60;
+
+    return { 
+      token, 
+      websiteId: id,
+      expiresAt,
+    };
+  }
+
+  async verifyToken(websiteId: string, token: string) {
+    const website = await this.findOne(websiteId);
+
+    const currentTimeMinutes = Math.floor(Date.now() / 1000 / 60);
+
+    // Check tokens for current minute and previous minute (2 minute window)
+    const validTokens = [
+      this.generateTokenForMinute(websiteId, currentTimeMinutes),
+      this.generateTokenForMinute(websiteId, currentTimeMinutes - 1),
+    ];
+
+    const isValid = validTokens.includes(token);
+
+    return {
+      valid: isValid,
+      websiteId,
+      name: website.name,
+      domainAddresses: website.domainAddresses.map((d) => d.address),
+      message: isValid ? 'Token is valid - website is legitimate' : 'Token is invalid or expired',
+    };
   }
 }
 

@@ -9,7 +9,7 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { WebsiteService } from './website.service';
-import { CreateWebsiteDto, UpdateWebsiteDto } from './dto';
+import { CreateWebsiteDto, UpdateWebsiteDto, VerifyTokenDto } from './dto';
 
 @Controller('websites')
 export class WebsiteController {
@@ -23,6 +23,19 @@ export class WebsiteController {
   @Get()
   findAll() {
     return this.websiteService.findAll();
+  }
+
+  @Get(':id/current-token')
+  getCurrentToken(@Param('id', ParseUUIDPipe) id: string) {
+    return this.websiteService.getCurrentToken(id);
+  }
+
+  @Post(':id/verify-token')
+  verifyToken(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() verifyTokenDto: VerifyTokenDto,
+  ) {
+    return this.websiteService.verifyToken(id, verifyTokenDto.token);
   }
 
   @Get(':id')
