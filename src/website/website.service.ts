@@ -117,7 +117,20 @@ export class WebsiteService {
   }
 
   async verifyToken(websiteId: string, token: string) {
-    const website = await this.findOne(websiteId);
+    const website = await this.prisma.website.findUnique({
+      where: { id: websiteId },
+      include: {
+        domainAddresses: true,
+        ipAddresses: true,
+      },
+    });
+
+    if (!website) {
+      return {
+        valid: false,
+        message: 'Website is invalid!',
+      };
+    }
 
     const currentTimeMinutes = Math.floor(Date.now() / 1000 / 60);
 

@@ -78,12 +78,12 @@ export class VerifyTokenResponseDto {
   @ApiProperty({ example: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890' })
   websiteId: string;
 
-  @ApiProperty({ example: 'Google' })
-  name: string;
+  @ApiProperty({ example: 'Google', nullable: true, description: 'Website name (null if not found)' })
+  name: string | null;
 
   @ApiProperty({ 
     example: ['www.google.com', 'mail.google.com'],
-    description: 'List of domain addresses for the website'
+    description: 'List of domain addresses for the website (empty if not found)'
   })
   domainAddresses: string[];
 

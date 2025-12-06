@@ -22,14 +22,13 @@ const websites = [
   { name: 'Ministerstwo Zdrowia', domain: 'zdrowie.gov.pl' },
 ];
 
-// Remove duplicates based on domain
 const uniqueWebsites = websites.filter(
   (website, index, self) =>
     index === self.findIndex((w) => w.domain === website.domain)
 );
 
 async function seedWebsites() {
-  console.log(`🌱 Seeding ${uniqueWebsites.length} websites to ${API_URL}/websites\n`);
+  console.log(`Seeding ${uniqueWebsites.length} websites to ${API_URL}/websites\n`);
 
   for (const website of uniqueWebsites) {
     try {
@@ -46,17 +45,17 @@ async function seedWebsites() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(`✅ Created: ${website.name} (${website.domain}) - ID: ${data.id}`);
+        console.log(`Created: ${website.name} (${website.domain}) - ID: ${data.id}`);
       } else {
         const error = await response.json();
-        console.log(`❌ Failed: ${website.name} - ${error.message || response.statusText}`);
+        console.log(`Failed: ${website.name} - ${error.message || response.statusText}`);
       }
     } catch (error) {
-      console.log(`❌ Error: ${website.name} - ${error.message}`);
+      console.log(`Error: ${website.name} - ${error.message}`);
     }
   }
 
-  console.log('\n✨ Seeding complete!');
+  console.log('\nSeeding complete!');
 }
 
 seedWebsites();
