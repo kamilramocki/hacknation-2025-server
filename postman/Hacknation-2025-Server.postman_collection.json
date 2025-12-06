@@ -1,0 +1,561 @@
+{
+  "info": {
+    "name": "Hacknation-2025-Server",
+    "description": "API collection for Website, DomainAddress, and IPAddress endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Websites",
+      "item": [
+        {
+          "name": "CreateWebsite",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.id) {",
+                  "    pm.collectionVariables.set('WebsiteId', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Create a new website",
+            "url": {
+              "raw": "{{ApiUrl}}/websites",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "websites"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Google\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GetAllWebsites",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Get all websites with their domain and IP addresses",
+            "url": {
+              "raw": "{{ApiUrl}}/websites",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "websites"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "GetWebsite",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Get a website by ID with its domain and IP addresses",
+            "url": {
+              "raw": "{{ApiUrl}}/websites/{{WebsiteId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "websites",
+                "{{WebsiteId}}"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "UpdateWebsite",
+          "event": [],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Update a website by ID",
+            "url": {
+              "raw": "{{ApiUrl}}/websites/{{WebsiteId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "websites",
+                "{{WebsiteId}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Google Updated\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DeleteWebsite",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Delete a website by ID (cascades to domain and IP addresses)",
+            "url": {
+              "raw": "{{ApiUrl}}/websites/{{WebsiteId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "websites",
+                "{{WebsiteId}}"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "DomainAddresses",
+      "item": [
+        {
+          "name": "CreateDomainAddress",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.id) {",
+                  "    pm.collectionVariables.set('DomainAddressId', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Create a new domain address for a website",
+            "url": {
+              "raw": "{{ApiUrl}}/domain-addresses",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "domain-addresses"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"www.google.com\",\n  \"websiteId\": \"{{WebsiteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GetAllDomainAddresses",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Get all domain addresses with their websites",
+            "url": {
+              "raw": "{{ApiUrl}}/domain-addresses",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "domain-addresses"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "GetDomainAddress",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Get a domain address by ID",
+            "url": {
+              "raw": "{{ApiUrl}}/domain-addresses/{{DomainAddressId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "domain-addresses",
+                "{{DomainAddressId}}"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "GetDomainAddressesByWebsiteId",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Get all domain addresses for a specific website",
+            "url": {
+              "raw": "{{ApiUrl}}/domain-addresses/website/{{WebsiteId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "domain-addresses",
+                "website",
+                "{{WebsiteId}}"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "UpdateDomainAddress",
+          "event": [],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Update a domain address by ID",
+            "url": {
+              "raw": "{{ApiUrl}}/domain-addresses/{{DomainAddressId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "domain-addresses",
+                "{{DomainAddressId}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"mail.google.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DeleteDomainAddress",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Delete a domain address by ID",
+            "url": {
+              "raw": "{{ApiUrl}}/domain-addresses/{{DomainAddressId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "domain-addresses",
+                "{{DomainAddressId}}"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "IPAddresses",
+      "item": [
+        {
+          "name": "CreateIPAddress",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.id) {",
+                  "    pm.collectionVariables.set('IPAddressId', jsonData.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Create a new IP address for a website",
+            "url": {
+              "raw": "{{ApiUrl}}/ip-addresses",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "ip-addresses"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"142.250.185.206\",\n  \"websiteId\": \"{{WebsiteId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GetAllIPAddresses",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Get all IP addresses with their websites",
+            "url": {
+              "raw": "{{ApiUrl}}/ip-addresses",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "ip-addresses"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "GetIPAddress",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Get an IP address by ID",
+            "url": {
+              "raw": "{{ApiUrl}}/ip-addresses/{{IPAddressId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "ip-addresses",
+                "{{IPAddressId}}"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "GetIPAddressesByWebsiteId",
+          "event": [],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Get all IP addresses for a specific website",
+            "url": {
+              "raw": "{{ApiUrl}}/ip-addresses/website/{{WebsiteId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "ip-addresses",
+                "website",
+                "{{WebsiteId}}"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "UpdateIPAddress",
+          "event": [],
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Update an IP address by ID",
+            "url": {
+              "raw": "{{ApiUrl}}/ip-addresses/{{IPAddressId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "ip-addresses",
+                "{{IPAddressId}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"address\": \"172.217.16.142\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "DeleteIPAddress",
+          "event": [],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "auth": {
+              "type": "noauth"
+            },
+            "description": "Delete an IP address by ID",
+            "url": {
+              "raw": "{{ApiUrl}}/ip-addresses/{{IPAddressId}}",
+              "protocol": "",
+              "host": [
+                "{{ApiUrl}}"
+              ],
+              "path": [
+                "ip-addresses",
+                "{{IPAddressId}}"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "ApiUrl",
+      "value": "http://localhost:3000",
+      "type": "default"
+    },
+    {
+      "key": "WebsiteId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "DomainAddressId",
+      "value": "",
+      "type": "default"
+    },
+    {
+      "key": "IPAddressId",
+      "value": "",
+      "type": "default"
+    }
+  ]
+}
+
